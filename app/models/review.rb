@@ -11,28 +11,25 @@ class Review
   end
 
   def parse_title(review)
-    review.css('.reviewTitle').text.try(:strip)
+    review.css('.reviewTitle').try(:text).try(:strip)
   end
 
   def parse_content(review)
-    review.css('.reviewText').text.try(:strip)
+    review.css('.reviewText').try(:text).try(:strip)
   end
 
   def parse_author(review)
-    review.css('.consumerName').text.try(:strip)
+    review.css('.consumerName').try(:text).try(:strip)
   end
 
   def parse_rating(review)
-    # if not found, it will set to 0 which is O.K.
-    review.css('.numRec').text.scan(/(\d) of \d/).flatten.first.to_i
+    # use regex to get first number in string
+    review.css('.numRec').try(:text).try(:[], /\d/).try(:to_i) rescue 0 
   end
 
   def parse_date(review)
-    review.css('.consumerReviewDate').text.scan(/Reviewed in (.*)/).flatten.first.try(:strip)
+    # use regex to get month and year
+    review.css('.consumerReviewDate').try(:text).try(:[], /Reviewed in (.*)/, 1) 
   end
-
-#  def to_s
-#    "Title: #{@title}"
-  #end
 
 end
