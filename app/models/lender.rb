@@ -8,6 +8,8 @@ class Lender
 
   def initialize(url)
     @base_url = URI.parse(url)
+    raise URI::InvalidURIError unless @base_url.to_s =~ URI::regexp
+
     @current_page = 1
     @main_doc = get_doc(@base_url)
 
@@ -15,6 +17,7 @@ class Lender
     @type = parse_type
     @rating = parse_rating
     @review_count = parse_review_count
+
     cache_key = "#{@name}-#{@review_count}"
     @reviews = Rails.cache.fetch(cache_key, expires_in: 1.day) do
       collect_reviews

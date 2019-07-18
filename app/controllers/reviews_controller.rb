@@ -9,9 +9,9 @@ class ReviewsController < ApplicationController
 
     render json: @lender.to_h
   rescue URI::InvalidURIError => e
-    render json: { error: "Param 'url' must be a valid url: #{url}" }
+    render json: { error: "Param 'url' must be a valid url: #{url}" }, status: 400
   rescue StandardError => e
-    render json: { error: e.to_s }
+    render json: { error: e.to_s }, status: 400
   end
 
 end
